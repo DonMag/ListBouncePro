@@ -14,6 +14,8 @@
 		66E5BA972A05481100207995 /* ListBouncePro.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 66E5BA952A05481100207995 /* ListBouncePro.xcdatamodeld */; };
 		66E5BA992A05481200207995 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E5BA982A05481200207995 /* Assets.xcassets */; };
 		66E5BA9C2A05481200207995 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66E5BA9A2A05481200207995 /* LaunchScreen.storyboard */; };
+		66E5BAA42A05492500207995 /* ListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E5BAA32A05492500207995 /* ListController.swift */; };
+		66E5BAA62A054A3F00207995 /* EditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E5BAA52A054A3F00207995 /* EditController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		66E5BA982A05481200207995 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		66E5BA9B2A05481200207995 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		66E5BA9D2A05481200207995 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66E5BAA32A05492500207995 /* ListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListController.swift; sourceTree = "<group>"; };
+		66E5BAA52A054A3F00207995 /* EditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,8 @@
 				66E5BA9A2A05481200207995 /* LaunchScreen.storyboard */,
 				66E5BA9D2A05481200207995 /* Info.plist */,
 				66E5BA952A05481100207995 /* ListBouncePro.xcdatamodeld */,
+				66E5BAA32A05492500207995 /* ListController.swift */,
+				66E5BAA52A054A3F00207995 /* EditController.swift */,
 			);
 			path = ListBouncePro;
 			sourceTree = "<group>";
@@ -142,6 +148,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				66E5BA912A05481100207995 /* ViewController.swift in Sources */,
+				66E5BAA62A054A3F00207995 /* EditController.swift in Sources */,
+				66E5BAA42A05492500207995 /* ListController.swift in Sources */,
 				66E5BA8D2A05481100207995 /* AppDelegate.swift in Sources */,
 				66E5BA8F2A05481100207995 /* SceneDelegate.swift in Sources */,
 				66E5BA972A05481100207995 /* ListBouncePro.xcdatamodeld in Sources */,
