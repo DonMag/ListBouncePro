@@ -11,7 +11,7 @@ import UIKit
 class EditController : UIViewController {
     var saveButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
-    var shopping: Shopping!
+    var shopping: Shopping?
     var isNew: Bool = false
 
     @IBOutlet weak var textField: UITextField!
@@ -26,7 +26,7 @@ class EditController : UIViewController {
         navigationItem.leftBarButtonItems = [cancelButton]
         navigationItem.rightBarButtonItems = [saveButton]
         
-        textField.text = shopping.item
+        textField.text = shopping?.item
     }
     
     @objc func save() {
@@ -37,7 +37,7 @@ class EditController : UIViewController {
             let newItem = Shopping(context: context)
             newItem.item = textField.text
         } else {
-            shopping.item = textField.text
+            shopping?.item = textField.text
         }
       
         appDelegate.saveContext()
@@ -52,8 +52,10 @@ class EditController : UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
         
-        context.delete(shopping)
-        appDelegate.saveContext()
+        if let shopping = shopping {
+            context.delete(shopping)
+            appDelegate.saveContext()
+        }
         
         dismiss(animated: true)
     }
