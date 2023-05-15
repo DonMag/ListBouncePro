@@ -75,17 +75,24 @@ extension ListController: NSFetchedResultsControllerDelegate {
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            self.tableView.insertRows(at: [newIndexPath!], with: .fade)
-        case .delete:
-            self.tableView.deleteRows(at: [indexPath!], with: .fade)
-        case .update:
-            self.tableView.reloadRows(at: [indexPath!], with: .fade)
-        case .move:
-            self.tableView.deleteRows(at: [indexPath!], with: .fade)
-            self.tableView.insertRows(at: [newIndexPath!], with: .fade)
-        }
+		
+		// so we can easily switch between table view row animation to see the differences
+		var anim: UITableView.RowAnimation = .fade
+		// for example:
+		//anim = .none
+		
+		switch type {
+		case .insert:
+			self.tableView.insertRows(at: [newIndexPath!], with: anim)
+		case .delete:
+			self.tableView.deleteRows(at: [indexPath!], with: anim)
+		case .update:
+			self.tableView.reloadRows(at: [indexPath!], with: anim)
+		case .move:
+			self.tableView.deleteRows(at: [indexPath!], with: anim)
+			self.tableView.insertRows(at: [newIndexPath!], with: anim)
+		}
+
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
