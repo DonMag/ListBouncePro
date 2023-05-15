@@ -9,11 +9,24 @@ import Foundation
 import UIKit
 
 class EditController : UIViewController {
+
+	// closure for edited and new
+	var updateThis: ((String, IndexPath?) -> ())?
+	
+	// closure for delete record
+	var deleteThis: ((IndexPath?) -> ())?
+	
+	// this will hold the selected item's indexPath, or
+	//	nil if it's a "+" new item
+	// will be passed back in the closures
+	var shoppingIndexPath: IndexPath?
+	
+	// the shopping.item string, instead of passing a copy of the item
+	var shoppingString: String = ""
+
     var saveButton: UIBarButtonItem!
     var cancelButton: UIBarButtonItem!
-    var shopping: Shopping?
-    var isNew: Bool = false
-
+	
     @IBOutlet weak var textField: UITextField!
     
     override func viewDidLoad() {
@@ -26,37 +39,22 @@ class EditController : UIViewController {
         navigationItem.leftBarButtonItems = [cancelButton]
         navigationItem.rightBarButtonItems = [saveButton]
         
-        textField.text = shopping?.item
+		textField.text = shoppingString
     }
     
     @objc func save() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        
-        if (isNew) {
-            let newItem = Shopping(context: context)
-            newItem.item = textField.text
-        } else {
-            shopping?.item = textField.text
-        }
-      
-        appDelegate.saveContext()
-        dismiss(animated: true)
+		updateThis?(textField.text ?? "", shoppingIndexPath)
     }
-    
+
+	@IBAction func deleteShopping(_ sender: Any) {
+		deleteThis?(shoppingIndexPath)
+	}
+
     @objc func cancel() {
+		// *could* also use a closure here for consistency,
+		//	but not really needed
+		//	(note that dragging down the presented controller also dismisses it as a "cancel" action)
         dismiss(animated: true)
     }
     
-    @IBAction func deleteShopping(_ sender: Any) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        
-        if let shopping = shopping {
-            context.delete(shopping)
-            appDelegate.saveContext()
-        }
-        
-        dismiss(animated: true)
-    }
 }

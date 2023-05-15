@@ -52,15 +52,53 @@ class ListController : UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "edit") {
+			// get a reference to the Edit controller
+			let controller = (segue.destination as! UINavigationController).topViewController as! EditController
+			// if we selected a row
             if let indexPath = tableView.indexPathForSelectedRow {
-                let controller = (segue.destination as! UINavigationController).topViewController as! EditController
-                controller.isNew = false
-                controller.shopping = frc?.object(at: indexPath)
+				controller.shoppingString = frc?.object(at: indexPath).item ?? ""
+				controller.shoppingIndexPath = indexPath
                 tableView.deselectRow(at: indexPath, animated: false)
-            } else {
-                let controller = (segue.destination as! UINavigationController).topViewController as! EditController
-                controller.isNew = true
             }
+			// set Edit controller closures
+			
+			// this will be called on Save
+			controller.updateThis = { [weak self] str, pth in
+				guard let self = self else { return }
+				// dismiss presented controller before updating core data
+				self.dismiss(animated: true, completion: {
+					let appDelegate = UIApplication.shared.delegate as! AppDelegate
+					let context = appDelegate.persistentContainer.viewContext
+					if let ipth = pth {
+						// if we have an indexPath, we're updating an existing record
+						let shopping = self.frc?.object(at: ipth)
+						shopping?.item = str
+					} else {
+						// no indexPath, so "+" new record
+						let newItem = Shopping(context: context)
+						newItem.item = str
+					}
+					appDelegate.saveContext()
+				})
+			}
+			
+			// this will be called on Delete
+			controller.deleteThis = { [weak self] pth in
+				guard let self = self else { return }
+				// dismiss presented controller before updating core data
+				self.dismiss(animated: true, completion: {
+					let appDelegate = UIApplication.shared.delegate as! AppDelegate
+					let context = appDelegate.persistentContainer.viewContext
+					// make sure we have a valid indexPath
+					if let ipth = pth {
+						let shopping = self.frc?.object(at: ipth)
+						if let shopping = shopping {
+							context.delete(shopping)
+						}
+					}
+					appDelegate.saveContext()
+				})
+			}
         }
     }
     
@@ -75,16 +113,22 @@ extension ListController: NSFetchedResultsControllerDelegate {
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+		
+		// so we can easily switch between table view row animation to see the differences
+		var anim: UITableView.RowAnimation = .fade
+		// for example:
+		//anim = .none
+		
         switch type {
         case .insert:
-            self.tableView.insertRows(at: [newIndexPath!], with: .fade)
+            self.tableView.insertRows(at: [newIndexPath!], with: anim)
         case .delete:
-            self.tableView.deleteRows(at: [indexPath!], with: .fade)
+            self.tableView.deleteRows(at: [indexPath!], with: anim)
         case .update:
-            self.tableView.reloadRows(at: [indexPath!], with: .fade)
+            self.tableView.reloadRows(at: [indexPath!], with: anim)
         case .move:
-            self.tableView.deleteRows(at: [indexPath!], with: .fade)
-            self.tableView.insertRows(at: [newIndexPath!], with: .fade)
+            self.tableView.deleteRows(at: [indexPath!], with: anim)
+            self.tableView.insertRows(at: [newIndexPath!], with: anim)
         }
     }
     
